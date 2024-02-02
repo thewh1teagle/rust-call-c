@@ -9,33 +9,32 @@ fn main() {
     let out_dir = env::var("OUT_DIR").expect("Failed to get OUT_DIR");
 
     // Compile lib.c into lib.o in the output directory
-    println!("cargo:warning={}", out_dir);
     let compile_lib = Command::new("gcc")
         .arg("-c")
-        .arg("lib.c")
+        .arg("src/hello.c")
         .arg("-o")
-        .arg(&format!("{}/lib.o", out_dir))
+        .arg(&format!("{}/hello.o", out_dir))
         .status()
-        .expect("Failed to compile lib.c into lib.o");
+        .expect("Failed to compile hello.c into hello.o");
 
     if !compile_lib.success() {
-        panic!("Compilation of lib.c into lib.o failed");
+        panic!("Compilation of hello.c into hello.o failed");
     }
 
     // Create lib.a from lib.o in the output directory
     let create_lib = Command::new("ar")
         .arg("rcs")
-        .arg(&format!("{}/lib.a", out_dir))
-        .arg(&format!("{}/lib.o", out_dir))
+        .arg(&format!("{}/libhello.a", out_dir))
+        .arg(&format!("{}/hello.o", out_dir))
         .status()
-        .expect("Failed to create lib.a from lib.o");
+        .expect("Failed to create libhello.a from hello.o");
 
     if !create_lib.success() {
-        panic!("Creation of lib.a from lib.o failed");
+        panic!("Creation of libhello.a from hello.o failed");
     }
 
     // No need to remove lib.o explicitly since it's in the output directory
 
     println!("cargo:rustc-link-search=native={}", out_dir);
-    println!("cargo:rustc-link-lib=static=lib");
+    println!("cargo:rustc-link-lib=static=hello");
 }
