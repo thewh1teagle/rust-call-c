@@ -2,7 +2,9 @@
 calling c from rust
 
 # Build
+```console
 cargo build --release
+```
 
 # Run
 ```console
