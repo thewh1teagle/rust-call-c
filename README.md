@@ -5,4 +5,6 @@ calling c from rust
 cargo build --release
 
 # Run
+```console
 ./target/release/rust-call-c
+```
